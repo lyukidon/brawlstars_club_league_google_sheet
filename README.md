@@ -1,0 +1,1 @@
+# brawlstars_club_league_google_sheet
