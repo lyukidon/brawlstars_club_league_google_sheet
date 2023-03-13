@@ -1,10 +1,33 @@
-const { GoogleSpreadsheet } = require('google-spreadsheet');
+const { GoogleSpreadsheet } = require("google-spreadsheet");
+const { google } = require("googleapis");
 
-const doc = new GoogleSpreadsheet('https://docs.google.com/spreadsheets/d/1Qwi4D7xmFgbruQ3lTl4z342xcVRMJWuWeOJJni-6N9g/edit#gid=0');
+// API 키 설정
+const apiKey = "AIzaSyDcCcETleJe0Q-iyZf9Ri8y4_fyfaw2zz8";
 
-async function end(){
-    const data = await doc.loadInfo();
-    console.log(data)
+const doc = new GoogleSpreadsheet(
+    "1Qwi4D7xmFgbruQ3lTl4z342xcVRMJWuWeOJJni-6N9g"
+  );
+
+async function authGoogleSheet(){
+	try{
+		await doc.useApiKey(apiKey);
+		await doc.loadInfo();
+        console.log(doc.title)
+	}catch(err){
+		console.log( "AUTH ERROR ", err)
+	}
 }
+authGoogleSheet();
 
-end()
+async function readFirstSheetRow(){ 
+    await doc.useApiKey(apiKey);
+    await doc.loadInfo()
+	var sheet = doc.sheetsByIndex[0]; // 첫번째 시트를 가져옵니다.
+    var rows = await sheet.getRows({offset:0, limit:2}); // 세 번째 row 부터 100개 row를 가져옵니다.
+    rows.forEach((ele)=>{
+    	console.log( ele )
+    });
+    
+    // const newSheet = await doc.addSheet({ title: 'hot new sheet!' });
+}
+readFirstSheetRow();
